@@ -11,7 +11,13 @@ import {
   Linkedin,
   MapPin,
   Mail,
-  Phone
+  Phone,
+  Rocket,
+  Globe,
+  MessageCircle,
+  BarChart3,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { SiteConfig, Language, Partner, Feature, StatItem, ProcessStep, Testimonial, PricingPlan, FAQItem, TeamMember, BlogPost, Translation } from './types';
 import Admin from './Admin';
@@ -20,52 +26,100 @@ const t = (trans: Translation, lang: Language): string => {
   return trans[lang] || trans['ru'] || '';
 };
 
-const Navbar = ({ isDark, toggleTheme, lang, setLang, config }: { isDark: boolean, toggleTheme: () => void, lang: Language, setLang: (l: Language) => void, config: SiteConfig }) => {
+const Logo = () => (
+  <div className="flex items-center gap-2">
+    <span className="material-icons-round text-primary text-4xl">diversity_3</span>
+    <div className="flex flex-col leading-none">
+      <span className="text-2xl font-bold text-primary tracking-tight uppercase">Robitai</span>
+      <span className="text-lg font-bold text-secondary tracking-widest uppercase">Nav</span>
+    </div>
+  </div>
+);
+
+const Navbar = ({ isDark, toggleTheme, lang, setLang, config, onAdminClick }: { isDark: boolean, toggleTheme: () => void, lang: Language, setLang: (l: Language) => void, config: SiteConfig, onAdminClick: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const languages = [
+    { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+    { code: 'uz', label: 'O\'zbekcha', flag: '🇺🇿' },
+    { code: 'en', label: 'English', flag: '🇺🇸' },
+    { code: 'tj', label: 'Тоҷикӣ', flag: '🇹🇯' }
+  ] as const;
+
+  const currentLang = languages.find(l => l.code === lang) || languages[0];
 
   return (
-    <nav className="fixed w-full z-50 top-0 start-0 border-b border-gray-200 dark:border-gray-700 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md shadow-sm">
-      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between px-4 py-3">
-        <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <div className="flex items-center gap-2">
-            <span className="material-icons-round text-primary text-4xl">diversity_3</span>
-            <div className="flex flex-col leading-none">
-              <span className="text-2xl font-bold text-primary tracking-tight uppercase">Robitai</span>
-              <span className="text-lg font-bold text-secondary tracking-widest uppercase">Nav</span>
-            </div>
+    <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-white/5 py-2' : 'bg-transparent py-4'}`}>
+      <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between px-4">
+        <a href="#" className="flex items-center gap-2 group">
+          <motion.div 
+            whileHover={{ rotate: 180 }}
+            className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20"
+          >
+            <Rocket size={20} />
+          </motion.div>
+          <div className="flex flex-col leading-none">
+            <span className="text-xl font-black tracking-tighter text-gray-900 dark:text-white group-hover:text-primary transition-colors">ROBITAI</span>
+            <span className="text-sm font-black tracking-[0.2em] text-secondary">NAV</span>
           </div>
         </a>
         
-        <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse gap-4 items-center">
-          <div className="hidden sm:flex bg-gray-100 dark:bg-white/5 p-1 rounded-xl">
-            {(['ru', 'uz', 'en'] as const).map((l) => (
+        <div className="flex md:order-2 gap-3 items-center">
+          {/* Theme Toggle - Clearer Icons */}
+          <button 
+            onClick={toggleTheme}
+            className="relative w-14 h-8 flex items-center rounded-full bg-gray-100 dark:bg-white/5 p-1 transition-all border border-gray-200 dark:border-white/10 shrink-0"
+            title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          >
+            <motion.div
+              animate={{ x: isDark ? 24 : 0 }}
+              className="w-6 h-6 bg-white dark:bg-primary rounded-full shadow-sm flex items-center justify-center text-primary dark:text-white"
+            >
+              {isDark ? <Moon size={14} /> : <Sun size={14} />}
+            </motion.div>
+          </button>
+
+          {/* Language Selector - Stable Layout */}
+          <div className="flex bg-gray-100 dark:bg-white/5 p-1 rounded-full border border-gray-200 dark:border-white/10 w-[144px] justify-between shrink-0">
+            {languages.map((l) => (
               <button
-                key={l}
-                onClick={() => setLang(l)}
-                className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest transition-all ${
-                  lang === l ? 'bg-white dark:bg-white/10 text-primary shadow-sm' : 'text-gray-400 hover:text-gray-600'
+                key={l.code}
+                onClick={() => setLang(l.code as Language)}
+                className={`w-8 h-8 flex items-center justify-center rounded-full text-sm transition-all ${
+                  lang === l.code ? 'bg-white dark:bg-primary shadow-sm' : 'opacity-50 hover:opacity-100'
                 }`}
+                title={l.label}
               >
-                {l}
+                {l.flag}
               </button>
             ))}
           </div>
 
+          {/* Admin Button - Clearer */}
           <button 
-            onClick={toggleTheme}
-            className="p-2 text-gray-500 rounded-lg hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 focus:outline-none"
+            onClick={onAdminClick}
+            className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 transition-all text-gray-400 hover:text-primary border border-transparent hover:border-primary/30 shrink-0"
+            title="Admin Panel"
           >
-            <span className="material-icons-round dark:hidden">dark_mode</span>
-            <span className="material-icons-round hidden dark:block">light_mode</span>
+            <SettingsIcon size={18} />
+            <span className="hidden lg:inline text-[10px] font-black uppercase tracking-widest">Admin</span>
           </button>
           
-          <button className="text-white bg-primary hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center hidden md:block shadow-lg shadow-primary/30 transition-all hover:-translate-y-0.5">
+          <button className="btn-primary hidden md:block py-2.5 px-6 rounded-xl text-sm shrink-0 min-w-[160px]">
             {t(config.hero.cta, lang)}
           </button>
           
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none"
+            className="p-2 rounded-xl md:hidden text-gray-500 hover:bg-gray-100 dark:hover:bg-white/10"
           >
             <span className="material-icons-round">{isOpen ? 'close' : 'menu'}</span>
           </button>
@@ -73,9 +127,9 @@ const Navbar = ({ isDark, toggleTheme, lang, setLang, config }: { isDark: boolea
 
         <div className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${isOpen ? 'block' : 'hidden'}`}>
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 md:bg-transparent dark:bg-gray-800 md:dark:bg-transparent dark:border-gray-700">
-            <li><a href="#features" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-white dark:hover:text-primary transition-colors">{lang === 'ru' ? 'Преимущества' : lang === 'uz' ? 'Afzalliklar' : 'Features'}</a></li>
-            <li><a href="#process" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-white dark:hover:text-primary transition-colors">{lang === 'ru' ? 'Процесс' : lang === 'uz' ? 'Jarayon' : 'Process'}</a></li>
-            <li><a href="#pricing" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-white dark:hover:text-primary transition-colors">{lang === 'ru' ? 'Цены' : lang === 'uz' ? 'Narxlar' : 'Pricing'}</a></li>
+            <li><a href="#features" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-white dark:hover:text-primary transition-colors">{lang === 'ru' ? 'Преимущества' : lang === 'uz' ? 'Afzalliklar' : lang === 'en' ? 'Features' : 'Афзалиятҳо'}</a></li>
+            <li><a href="#process" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-white dark:hover:text-primary transition-colors">{lang === 'ru' ? 'Процесс' : lang === 'uz' ? 'Jarayon' : lang === 'en' ? 'Process' : 'Раванд'}</a></li>
+            <li><a href="#pricing" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-white dark:hover:text-primary transition-colors">{lang === 'ru' ? 'Цены' : lang === 'uz' ? 'Narxlar' : lang === 'en' ? 'Pricing' : 'Нархҳо'}</a></li>
             <li><a href="#faq" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0 dark:text-white dark:hover:text-primary transition-colors">FAQ</a></li>
           </ul>
         </div>
@@ -86,130 +140,111 @@ const Navbar = ({ isDark, toggleTheme, lang, setLang, config }: { isDark: boolea
 
 const Hero = ({ data, lang }: { data: SiteConfig['hero'], lang: Language }) => {
   return (
-    <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28 overflow-hidden">
-      <div className="absolute inset-0 bg-grid-pattern opacity-40 pointer-events-none"></div>
-      <div className="absolute top-20 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl filter opacity-50 dark:opacity-20 animate-pulse-slow"></div>
-      <div className="absolute bottom-0 left-0 w-72 h-72 bg-secondary/20 rounded-full blur-3xl filter opacity-50 dark:opacity-20"></div>
-      
+    <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-40 overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute inset-0 z-0">
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-primary/5 dark:bg-primary/10 skew-x-12 translate-x-1/4"></div>
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center px-3 py-1 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium mb-2 animate-bounce"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black uppercase tracking-widest"
             >
-              <span className="flex h-2 w-2 rounded-full bg-primary mr-2"></span>
-              {lang === 'ru' ? 'Лидер рынка Узбекистана и Таджикистана' : lang === 'uz' ? 'O\'zbekiston va Tojikiston bozori yetakchisi' : 'Market Leader in Uzbekistan and Tajikistan'}
+              <span className="w-2 h-2 bg-primary rounded-full animate-ping"></span>
+              {lang === 'ru' ? 'Инновации в VAS' : lang === 'uz' ? 'VAS dagi innovatsiyalar' : 'Innovation in VAS'}
             </motion.div>
-            
+
             <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-tight"
+              className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter text-gray-900 dark:text-white leading-[1.1] uppercase"
             >
               {t(data.title, lang).split('Robitai Nav')[0]}
-              <span className="text-gradient">Robitai Nav</span>
+              <span className="text-primary block">Robitai Nav</span>
             </motion.h1>
-            
+
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-lg text-gray-600 dark:text-gray-300 max-w-xl"
+              transition={{ delay: 0.1 }}
+              className="text-lg text-gray-600 dark:text-gray-400 max-w-lg font-medium leading-relaxed"
             >
               {t(data.subtitle, lang)}
             </motion.p>
-            
+
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex flex-col sm:flex-row gap-4"
+              transition={{ delay: 0.2 }}
+              className="flex flex-wrap gap-4"
             >
-              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                <span className="material-icons-round text-secondary">verified</span>
-                <span>{lang === 'ru' ? 'Высокая конверсия' : lang === 'uz' ? 'Yuqori konversiya' : 'High Conversion'}</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                <span className="material-icons-round text-secondary">verified</span>
-                <span>{lang === 'ru' ? 'Поддержка 24/7' : lang === 'uz' ? 'Qo\'llab-quvvatlash 24/7' : 'Support 24/7'}</span>
-              </div>
-              <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                <span className="material-icons-round text-secondary">verified</span>
-                <span>{lang === 'ru' ? 'Локализация' : lang === 'uz' ? 'Mahalliylashtirish' : 'Localization'}</span>
-              </div>
+              <button className="btn-primary px-8 py-4 rounded-2xl shadow-2xl shadow-primary/30 flex items-center gap-2 group">
+                {t(data.cta, lang)} 
+                <Rocket size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+              </button>
+              <button 
+                onClick={() => (window as any).Tawk_API?.maximize()}
+                className="px-8 py-4 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all flex items-center gap-2 shadow-xl"
+              >
+                <MessageCircle size={20} className="text-primary" />
+                {lang === 'ru' ? 'Поддержка' : lang === 'uz' ? 'Yordam' : 'Support'}
+              </button>
             </motion.div>
-            
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="flex flex-col sm:flex-row gap-4 pt-4"
-            >
-              <a href="#" className="btn-primary">
-                {t(data.cta, lang)}
-                <span className="material-icons-round ml-2">arrow_forward</span>
-              </a>
-              <a href="#" className="btn-secondary">
-                {lang === 'ru' ? 'Узнать больше' : lang === 'uz' ? 'Batafsil ma\'lumot' : 'Learn More'}
-              </a>
-            </motion.div>
-            
-            <div className="flex items-center gap-4 pt-4">
-              <div className="flex -space-x-3">
-                {[1, 2, 3].map((i) => (
-                  <img 
-                    key={i}
-                    src={`https://picsum.photos/seed/user${i}/100/100`} 
-                    alt={`User ${i}`} 
-                    className="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800"
-                    referrerPolicy="no-referrer"
-                  />
+
+            <div className="flex items-center gap-8 pt-4">
+              <div className="flex -space-x-4">
+                {[1, 2, 3, 4].map(i => (
+                  <img key={i} src={`https://picsum.photos/seed/${i}/100/100`} className="w-12 h-12 rounded-2xl border-4 border-white dark:border-gray-900 object-cover" referrerPolicy="no-referrer" />
                 ))}
-                <div className="w-10 h-10 rounded-full border-2 border-white dark:border-gray-800 bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">+1k</div>
               </div>
-              <div className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                <span className="text-primary font-bold">1200+</span> {lang === 'ru' ? 'довольных клиентов' : lang === 'uz' ? 'mamnun mijozlar' : 'happy clients'}
+              <div>
+                <p className="text-sm font-black text-gray-900 dark:text-white">1200+</p>
+                <p className="text-[10px] text-gray-400 uppercase font-bold tracking-widest">{lang === 'ru' ? 'Довольных клиентов' : 'Happy Clients'}</p>
               </div>
             </div>
           </div>
-          
-          <div className="relative lg:h-[600px] flex items-center justify-center">
-            <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-secondary/30 rounded-full blur-[100px] opacity-40"></div>
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.5 }}
-              className="relative w-full max-w-md aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl border-4 border-white/20 dark:border-gray-700/50 backdrop-blur-sm animate-float"
-            >
-              <img 
-                src="https://picsum.photos/seed/digital/800/1000" 
-                alt="Digital Professional" 
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
-              <div className="absolute bottom-8 left-8 right-8 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md p-4 rounded-xl border border-white/20 shadow-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">{lang === 'ru' ? 'Рост аудитории' : lang === 'uz' ? 'Auditoriya o\'sishi' : 'Audience Growth'}</span>
-                  <span className="text-green-500 text-sm font-bold flex items-center">
-                    <span className="material-icons-round text-sm">trending_up</span> +24%
-                  </span>
+
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.9, rotate: 5 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ delay: 0.3, type: 'spring' }}
+            className="relative"
+          >
+            <div className="absolute -inset-4 bg-gradient-to-tr from-primary to-secondary rounded-[3rem] blur-2xl opacity-20 animate-pulse"></div>
+            <div className="relative aspect-[4/5] rounded-[3rem] overflow-hidden border-8 border-white dark:border-gray-800 shadow-2xl">
+              <img src="https://picsum.photos/seed/office/800/1000" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              <div className="absolute bottom-8 left-8 right-8 p-6 bg-white/10 backdrop-blur-xl rounded-2xl border border-white/20">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white">
+                      <BarChart3 size={20} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-white/60 uppercase tracking-widest">Performance</p>
+                      <p className="text-lg font-black text-white">+42.5%</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs font-bold text-white/60 uppercase tracking-widest">Status</p>
+                    <p className="text-lg font-black text-green-400">Active</p>
+                  </div>
                 </div>
-                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mb-1">
-                  <div className="bg-gradient-to-r from-primary to-secondary h-2.5 rounded-full" style={{ width: '75%' }}></div>
-                </div>
-                <div className="flex justify-between text-xs text-gray-400">
-                  <span>{lang === 'ru' ? 'Месяц 1' : lang === 'uz' ? '1-oy' : 'Month 1'}</span>
-                  <span>{lang === 'ru' ? 'Месяц 6' : lang === 'uz' ? '6-oy' : 'Month 6'}</span>
+                <div className="w-full bg-white/10 rounded-full h-1.5 overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: '75%' }}
+                    transition={{ duration: 2, delay: 1 }}
+                    className="h-full bg-primary"
+                  />
                 </div>
               </div>
-            </motion.div>
-            <div className="absolute -top-10 -right-10 bg-white dark:bg-gray-800 p-4 rounded-2xl shadow-xl animate-bounce" style={{ animationDuration: '3s' }}>
-              <span className="material-icons-round text-4xl text-secondary">bolt</span>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
@@ -277,8 +312,9 @@ const Features = ({ data, lang }: { data: Feature[], lang: Language }) => {
 
 const Stats = ({ data, lang }: { data: StatItem[], lang: Language }) => {
   return (
-    <section className="py-20 bg-hero-gradient">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="py-20 bg-hero-gradient relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none"></div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           {data.map((s, i) => (
             <motion.div 
@@ -302,6 +338,7 @@ const Stats = ({ data, lang }: { data: StatItem[], lang: Language }) => {
 const Process = ({ data, lang }: { data: ProcessStep[], lang: Language }) => {
   return (
     <section id="process" className="py-20 bg-surface-light dark:bg-surface-dark relative overflow-hidden">
+      <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none"></div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -312,8 +349,7 @@ const Process = ({ data, lang }: { data: ProcessStep[], lang: Language }) => {
           </p>
         </div>
         
-        <div className="grid md:grid-cols-3 gap-8 relative">
-          <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 border-t-2 border-dashed border-gray-300 dark:border-gray-700 z-0"></div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-8 relative">
           {data.map((s, i) => (
             <motion.div 
               key={s.id}
@@ -566,7 +602,7 @@ const Blog = ({ data, lang }: { data: BlogPost[], lang: Language }) => {
                   {t(p.category, lang)}
                 </div>
               </div>
-              <p className="text-xs text-gray-400 mb-2 font-bold uppercase tracking-widest">{t(p.date, lang)}</p>
+              <p className="text-xs text-gray-400 mb-2 font-bold uppercase tracking-widest">{p.date}</p>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white group-hover:text-primary transition-colors leading-tight">
                 {t(p.title, lang)}
               </h3>
@@ -712,6 +748,14 @@ const Footer = ({ data, lang }: { data: SiteConfig['footer'], lang: Language }) 
                 <span className="material-icons-round text-primary text-sm mr-2">phone</span>
                 {data.phone}
               </li>
+              {data.helpCenter && (
+                <li className="flex items-center">
+                  <span className="material-icons-round text-primary text-sm mr-2">help</span>
+                  <a href={data.helpCenter} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
+                    {lang === 'ru' ? 'Центр помощи' : lang === 'uz' ? 'Yordam markazi' : 'Help Center'}
+                  </a>
+                </li>
+              )}
             </ul>
           </div>
         </div>
@@ -779,6 +823,21 @@ export default function App() {
     }
   }, [isDark]);
 
+  useEffect(() => {
+    if (config?.tawkId) {
+      const s1 = document.createElement("script");
+      const s0 = document.getElementsByTagName("script")[0];
+      s1.async = true;
+      s1.src = `https://embed.tawk.to/${config.tawkId}`;
+      s1.charset = 'UTF-8';
+      s1.setAttribute('crossorigin', '*');
+      s0.parentNode?.insertBefore(s1, s0);
+      return () => {
+        s1.remove();
+      };
+    }
+  }, [config?.tawkId]);
+
   if (loading || !config) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background-light dark:bg-background-dark">
@@ -811,6 +870,10 @@ export default function App() {
         lang={lang} 
         setLang={setLang} 
         config={config}
+        onAdminClick={() => {
+          setIsAdmin(true);
+          window.history.pushState({}, '', '/admin');
+        }}
       />
       
       {config.layout.map((section) => (
@@ -830,17 +893,6 @@ export default function App() {
       ))}
 
       <Footer data={config.footer} lang={lang} />
-
-      {/* Admin shortcut */}
-      <button 
-        onClick={() => {
-          setIsAdmin(true);
-          window.history.pushState({}, '', '/admin');
-        }}
-        className="fixed bottom-6 right-6 w-12 h-12 bg-white dark:bg-gray-800 border border-gray-100 dark:border-white/10 rounded-full shadow-xl flex items-center justify-center text-gray-400 hover:text-primary z-50 transition-all"
-      >
-        <SettingsIcon size={20} />
-      </button>
     </motion.div>
   );
 }

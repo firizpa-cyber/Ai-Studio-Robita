@@ -6,13 +6,14 @@ import {
   ArrowLeft, LogOut, Check, Globe,
   Shield, Rocket, BarChart3, MessageSquare,
   CreditCard, HelpCircle, Phone, MapPin,
-  Send, MessageCircle, MousePointerClick
+  Send, MessageCircle, MousePointerClick,
+  Lock, User
 } from 'lucide-react';
 import { SiteConfig, Translation, Language } from './types';
 
 const TranslationInput = ({ 
   label, 
-  value = { ru: '', uz: '', en: '' }, 
+  value = { ru: '', uz: '', en: '', tj: '' }, 
   onChange, 
   isTextArea = false 
 }: { 
@@ -32,7 +33,7 @@ const TranslationInput = ({
       <div className="flex justify-between items-center">
         <label className="text-xs font-black uppercase tracking-widest text-gray-400">{label}</label>
         <div className="flex gap-1 bg-gray-100 dark:bg-white/5 p-1 rounded-lg">
-          {(['ru', 'uz', 'en'] as Language[]).map((l) => (
+          {(['ru', 'uz', 'en', 'tj'] as Language[]).map((l) => (
             <button
               key={l}
               onClick={() => setLang(l)}
@@ -62,6 +63,9 @@ const TranslationInput = ({
 };
 
 const Admin = ({ config, onSave }: { config: SiteConfig, onSave: (newConfig: SiteConfig) => void }) => {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [loginError, setLoginError] = useState(false);
   const [activeTab, setActiveTab] = useState<string>('layout');
   const [localConfig, setLocalConfig] = useState<SiteConfig>(config);
   const [isSaving, setIsSaving] = useState(false);
@@ -110,7 +114,7 @@ const Admin = ({ config, onSave }: { config: SiteConfig, onSave: (newConfig: Sit
   };
 
   const addItem = (type: keyof SiteConfig) => {
-    const emptyTrans = { ru: '', uz: '', en: '' };
+    const emptyTrans = { ru: '', uz: '', en: '', tj: '' };
     let newItem: any = { id: Date.now() };
 
     if (type === 'partners') newItem = { ...newItem, name: 'New Partner' };
@@ -159,7 +163,74 @@ const Admin = ({ config, onSave }: { config: SiteConfig, onSave: (newConfig: Sit
     { id: 'blog', label: 'Блог', icon: FileText },
     { id: 'ctaSection', label: 'Призыв к действию', icon: MousePointerClick },
     { id: 'footer', label: 'Контакты', icon: Phone },
+    { id: 'settings', label: 'Настройки', icon: Settings },
   ];
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    const correctPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123';
+    if (password === correctPassword) {
+      setIsAuthenticated(true);
+      setLoginError(false);
+    } else {
+      setLoginError(true);
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-dark flex items-center justify-center p-6">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="w-full max-w-md bg-white dark:bg-white/5 rounded-[2.5rem] p-10 border border-gray-200 dark:border-white/10 shadow-2xl"
+        >
+          <div className="flex flex-col items-center gap-6 mb-10">
+            <div className="w-20 h-20 bg-primary rounded-3xl flex items-center justify-center text-white shadow-2xl shadow-primary/30 rotate-12">
+              <Lock size={40} />
+            </div>
+            <div className="text-center">
+              <h1 className="text-3xl font-black tracking-tighter mb-2">ADMIN ACCESS</h1>
+              <p className="text-gray-400 text-sm">Введите пароль для входа в панель</p>
+            </div>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-4">Password</label>
+              <div className="relative">
+                <input 
+                  type="password" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••••"
+                  className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-2xl p-4 pl-12 outline-none focus:ring-2 ring-primary transition-all"
+                />
+                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+              </div>
+              <p className="text-[10px] text-primary ml-4 font-bold animate-pulse">
+                🔑 Пароль: admin123
+              </p>
+            </div>
+
+            {loginError && (
+              <motion.p 
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="text-red-500 text-xs font-bold text-center"
+              >
+                Неверный пароль. Попробуйте еще раз.
+              </motion.p>
+            )}
+
+            <button type="submit" className="w-full btn-primary py-4 rounded-2xl shadow-xl shadow-primary/20 flex items-center justify-center gap-2">
+              Войти <Rocket size={18} />
+            </button>
+          </form>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-dark text-gray-900 dark:text-white flex">
@@ -634,6 +705,35 @@ const Admin = ({ config, onSave }: { config: SiteConfig, onSave: (newConfig: Sit
                     onChange={(e) => updateFooter('phone', e.target.value)}
                     className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-2xl p-4 outline-none focus:ring-2 ring-primary"
                   />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'settings' && (
+            <div className="space-y-8">
+              <div className="bg-white dark:bg-white/5 border border-gray-100 dark:border-white/10 p-8 rounded-3xl space-y-6 shadow-sm">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary">
+                    <MessageCircle size={24} />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold">Интеграция Tawk.to</h3>
+                    <p className="text-sm text-gray-400">Введите ID виджета для подключения чата поддержки</p>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-black uppercase tracking-widest text-gray-400">Tawk.to Property ID</label>
+                  <input 
+                    type="text" 
+                    placeholder="Например: 60f7.../1fb..."
+                    value={localConfig.tawkId || ''}
+                    onChange={(e) => setLocalConfig({...localConfig, tawkId: e.target.value})}
+                    className="w-full bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10 rounded-2xl p-4 outline-none focus:ring-2 ring-primary transition-all"
+                  />
+                  <p className="text-[10px] text-gray-400 mt-2">
+                    ID можно найти в панели Tawk.to в разделе "Administration" → "Chat Widget".
+                  </p>
                 </div>
               </div>
             </div>

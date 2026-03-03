@@ -2,6 +2,7 @@ export interface Translation {
   ru: string;
   uz: string;
   en: string;
+  tj: string;
 }
 
 export interface Feature {
@@ -69,6 +70,7 @@ export interface StatItem {
 }
 
 export interface SiteConfig {
+  tawkId?: string;
   hero: {
     title: Translation;
     subtitle: Translation;
@@ -88,6 +90,7 @@ export interface SiteConfig {
     address: Translation;
     email: string;
     phone: string;
+    helpCenter?: string;
   };
   ctaSection: {
     title: Translation;
@@ -96,4 +99,4 @@ export interface SiteConfig {
   };
 }
 
-export type Language = 'ru' | 'uz' | 'en';
+export type Language = 'ru' | 'uz' | 'en' | 'tj';

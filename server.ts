@@ -15,36 +15,41 @@ db.exec(`
     id INTEGER PRIMARY KEY,
     key TEXT UNIQUE,
     value TEXT
-  )
+  );
 `);
 
 // Default configuration with translations
 const defaultConfig = {
+  tawkId: "69a6eb2624cf1b1c3d96702f/1jiq0d3kp",
   hero: {
     title: { 
       ru: "Ваш надежный партнер в мире VAS и цифрового контента", 
       uz: "VAS va raqamli kontent dunyosidagi ishonchli hamkoringiz", 
-      en: "Your Reliable Partner in the World of VAS and Digital Content" 
+      en: "Your Reliable Partner in the World of VAS and Digital Content",
+      tj: "Шарики боэътимоди шумо дар ҷаҳони VAS ва мундариҷаи рақамӣ"
     },
     subtitle: { 
       ru: "Robitai Nav — ведущий агрегатор и поставщик инновационных решений для мобильных операторов в Центральной Азии. Мы превращаем трафик в доход.", 
       uz: "Robitai Nav — Markaziy Osiyodagi mobil operatorlar uchun innovatsion yechimlarning yetakchi agregatori va yetkazib beruvchisi. Biz trafikni daromadga aylantiramiz.", 
-      en: "Robitai Nav is a leading aggregator and provider of innovative solutions for mobile operators in Central Asia. We turn traffic into revenue." 
+      en: "Robitai Nav is a leading aggregator and provider of innovative solutions for mobile operators in Central Asia. We turn traffic into revenue.",
+      tj: "Robitai Nav — агрегатори пешбар ва таъминкунандаи қарорҳои инноватсионӣ барои операторони мобилӣ дар Осиёи Марказӣ. Мо трафикро ба даромад табдил медиҳем."
     },
-    cta: { ru: "Связаться с нами", uz: "Biz bilan bog'lanish", en: "Contact Us" }
+    cta: { ru: "Связаться с нами", uz: "Biz bilan bog'lanish", en: "Contact Us", tj: "Бо мо тамос гиред" }
   },
   ctaSection: {
     title: { 
       ru: "Готовы масштабировать свой бизнес?", 
       uz: "Biznesingizni kengaytirishga tayyormisiz?", 
-      en: "Ready to scale your business?" 
+      en: "Ready to scale your business?",
+      tj: "Барои васеъ кардани тиҷорати худ омодаед?"
     },
     subtitle: { 
       ru: "Подпишитесь на нашу рассылку, чтобы получить демо-доступ и эксклюзивные условия сотрудничества.", 
       uz: "Demo-kirish va hamkorlikning eksklyuziv shartlarini olish uchun xabarnomamizga obuna bo'ling.", 
-      en: "Subscribe to our newsletter to get demo access and exclusive terms of cooperation." 
+      en: "Subscribe to our newsletter to get demo access and exclusive terms of cooperation.",
+      tj: "Ба бюллетени мо обуна шавед, то дастрасии демо ва шартҳои истисноии ҳамкориро ба даст оред."
     },
-    buttonText: { ru: "Подписаться", uz: "Obuna bo'lish", en: "Subscribe" }
+    buttonText: { ru: "Подписаться", uz: "Obuna bo'lish", en: "Subscribe", tj: "Обуна шудан" }
   },
   layout: [
     "Hero", "Partners", "Features", "Stats", "Process", "Testimonials", "Pricing", "Team", "FAQ", "Blog", "CTA"
@@ -89,6 +94,21 @@ const defaultConfig = {
       id: 6, 
       title: { ru: "Облачные решения", uz: "Bulutli yechimlar", en: "Cloud Solutions" }, 
       desc: { ru: "Масштабируемая инфраструктура для хранения и доставки контента с минимальной задержкой.", uz: "Kontentni saqlash va minimal kechikish bilan yetkazib berish uchun kengaytiriladigan infratuzilma.", en: "Scalable infrastructure for content storage and delivery with minimal latency." } 
+    },
+    { 
+      id: 7, 
+      title: { ru: "SMS-агрегация", uz: "SMS agregatsiyasi", en: "SMS Aggregation" }, 
+      desc: { ru: "Надежная платформа для массовых рассылок и уведомлений с высоким процентом доставки.", uz: "Yuqori yetkazib berish foiziga ega ommaviy xabarnomalar va bildirishnomalar uchun ishonchli platforma.", en: "Reliable platform for bulk messaging and notifications with a high delivery rate." } 
+    },
+    { 
+      id: 8, 
+      title: { ru: "Мобильные игры", uz: "Mobil o'yinlar", en: "Mobile Games" }, 
+      desc: { ru: "Каталог популярных HTML5 и нативных игр, адаптированных для всех типов мобильных устройств.", uz: "Barcha turdagi mobil qurilmalar uchun moslashtirilgan mashhur HTML5 va mahalliy o'yinlar katalogi.", en: "A catalog of popular HTML5 and native games adapted for all types of mobile devices." } 
+    },
+    { 
+      id: 9, 
+      title: { ru: "Видео-стриминг", uz: "Video striming", en: "Video Streaming" }, 
+      desc: { ru: "Платформа для трансляции лицензионного видеоконтента в высоком качестве (HD/4K).", uz: "Yuqori sifatli (HD/4K) litsenziyalangan video kontentni translyatsiya qilish platformasi.", en: "Platform for broadcasting licensed video content in high quality (HD/4K)." } 
     }
   ],
   stats: [
@@ -115,6 +135,18 @@ const defaultConfig = {
       num: "3", 
       title: { ru: "Запуск", uz: "Ishga tushirish", en: "Launch" }, 
       desc: { ru: "Старт проекта, мониторинг показателей и масштабирование.", uz: "Loyihani boshlash, ko'rsatkichlarni monitoring qilish va kengaytirish.", en: "Project start, performance monitoring and scaling." } 
+    },
+    { 
+      id: 4, 
+      num: "4", 
+      title: { ru: "Монетизация", uz: "Monetizatsiya", en: "Monetization" }, 
+      desc: { ru: "Оптимизация доходности и управление биллингом для стабильного роста прибыли.", uz: "Daromadlilikni optimallashtirish va foydaning barqaror o'sishi uchun billingni boshqarish.", en: "Profitability optimization and billing management for stable profit growth." } 
+    },
+    { 
+      id: 5, 
+      num: "5", 
+      title: { ru: "Поддержка", uz: "Qo'llab-quvvatlash", en: "Support" }, 
+      desc: { ru: "Постоянное обновление контента и техническое сопровождение 24/7.", uz: "Kontentni doimiy yangilab borish va 24/7 texnik kuzatuv.", en: "Constant content updates and 24/7 technical support." } 
     }
   ],
   testimonials: [
@@ -138,6 +170,13 @@ const defaultConfig = {
       role: { ru: "CTO, Tcell", uz: "CTO, Tcell", en: "CTO, Tcell" }, 
       content: { ru: "Интеграция прошла гладко благодаря отличной технической документации и поддержке Robitai Nav. Рекомендую!", uz: "Robitai Nav-ning ajoyib texnik hujjatlari va qo'llab-quvvatlashi tufayli integratsiya muammosiz o'tdi. Tavsiya qilaman!", en: "The integration went smoothly thanks to Robitai Nav's excellent technical documentation and support. I recommend them!" }, 
       img: "https://picsum.photos/seed/t3/100/100" 
+    },
+    { 
+      id: 4, 
+      name: "Музаффар Хакимов", 
+      role: { ru: "Product Owner, Mobiuz", uz: "Mahsulot egasi, Mobiuz", en: "Product Owner, Mobiuz" }, 
+      content: { ru: "Мы работаем с Robitai Nav уже более 5 лет. Это команда, которая всегда идет навстречу и предлагает лучшие решения.", uz: "Biz Robitai Nav bilan 5 yildan ortiq vaqtdan beri ishlaymiz. Bu har doim yordamga tayyor va eng yaxshi yechimlarni taklif qiladigan jamoa.", en: "We have been working with Robitai Nav for over 5 years. This is a team that always meets us halfway and offers the best solutions." }, 
+      img: "https://picsum.photos/seed/t4/100/100" 
     }
   ],
   pricing: [
@@ -184,7 +223,9 @@ const defaultConfig = {
     { id: 1, name: "Фаррух Каримов", role: { ru: "Founder & CEO", uz: "Asoschi va CEO", en: "Founder & CEO" }, img: "https://picsum.photos/seed/m1/400/400", telegram: "@farrux", whatsapp: "+998901234567" },
     { id: 2, name: "Дильшод Махмудов", role: { ru: "CTO", uz: "CTO", en: "CTO" }, img: "https://picsum.photos/seed/m2/400/400", telegram: "@dilshod_tech", whatsapp: "+998907654321" },
     { id: 3, name: "Нигора Саидова", role: { ru: "Head of Content", uz: "Kontent bo'limi rahbari", en: "Head of Content" }, img: "https://picsum.photos/seed/m3/400/400", telegram: "@nigora_content", whatsapp: "+998901112233" },
-    { id: 4, name: "Акмаль Расулов", role: { ru: "Head of Sales", uz: "Sotuv bo'limi rahbari", en: "Head of Sales" }, img: "https://picsum.photos/seed/m4/400/400", telegram: "@akmal_sales", whatsapp: "+998904445566" }
+    { id: 4, name: "Акмаль Расулов", role: { ru: "Head of Sales", uz: "Sotuv bo'limi rahbari", en: "Head of Sales" }, img: "https://picsum.photos/seed/m4/400/400", telegram: "@akmal_sales", whatsapp: "+998904445566" },
+    { id: 5, name: "Сабина Алиева", role: { ru: "Marketing Manager", uz: "Marketing menejeri", en: "Marketing Manager" }, img: "https://picsum.photos/seed/m5/400/400", telegram: "@sabina_mkt", whatsapp: "+998905556677" },
+    { id: 6, name: "Тимур Ибрагимов", role: { ru: "Account Manager", uz: "Akkaunt menejeri", en: "Account Manager" }, img: "https://picsum.photos/seed/m6/400/400", telegram: "@timur_acc", whatsapp: "+998906667788" }
   ],
   faq: [
     { 
@@ -209,9 +250,10 @@ const defaultConfig = {
     { id: 3, title: { ru: "Преимущества Direct Carrier Billing", uz: "Direct Carrier Billing-ning afzalliklari", en: "Advantages of Direct Carrier Billing" }, date: "20.05.2024", category: { ru: "Технологии", uz: "Texnologiyalar", en: "Technology" }, img: "https://picsum.photos/seed/b3/600/400" }
   ],
   footer: {
-    address: { ru: "ул. Истиклол, 15, Ташкент / Душанбе", uz: "Istiqlol ko'chasi, 15, Toshkent / Dushanbe", en: "15 Istiklol St, Tashkent / Dushanbe" },
-    email: "contact@robitainav.com",
-    phone: "+998 71 000 00 00"
+    address: { ru: "ул. Истиклол, 15, Ташкент / Душанбе", uz: "Istiqlol ko'chasi, 15, Toshkent / Dushanbe", en: "15 Istiklol St, Tashkent / Dushanbe", tj: "кӯчаи Истиқлол, 15, Тошканд / Душанбе" },
+    email: "tickets@robitai-nav.p.tawk.email",
+    phone: "+998 71 000 00 00",
+    helpCenter: "https://robitainav.tawk.help"
   }
 };
 

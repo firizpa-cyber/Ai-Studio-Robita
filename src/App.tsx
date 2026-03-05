@@ -184,19 +184,7 @@ const Hero = ({ data, lang }: { data: SiteConfig['hero'], lang: Language }) => {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => {
-                  if ((window as any).Tawk_API && typeof (window as any).Tawk_API.toggle === 'function') {
-                    (window as any).Tawk_API.toggle();
-                  } else if ((window as any).Tawk_API && typeof (window as any).Tawk_API.maximize === 'function') {
-                    (window as any).Tawk_API.maximize();
-                  } else {
-                    const tawkFrame = document.querySelector('iframe[src*="tawk.to"]')?.parentElement;
-                    if (tawkFrame) {
-                      const tawkButton = tawkFrame.querySelector('button') as HTMLElement;
-                      if (tawkButton) tawkButton.click();
-                    }
-                  }
-                }}
+                onClick={openTawkChat}
                 className="px-8 py-4 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all flex items-center gap-2 shadow-xl hover:shadow-primary/30"
               >
                 <MessageCircle size={20} className="text-primary" />
@@ -694,19 +682,7 @@ const CTA = ({ data, lang }: { data: SiteConfig['ctaSection'], lang: Language })
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => {
-                if ((window as any).Tawk_API && typeof (window as any).Tawk_API.toggle === 'function') {
-                  (window as any).Tawk_API.toggle();
-                } else if ((window as any).Tawk_API && typeof (window as any).Tawk_API.maximize === 'function') {
-                  (window as any).Tawk_API.maximize();
-                } else {
-                  const tawkFrame = document.querySelector('iframe[src*="tawk.to"]')?.parentElement;
-                  if (tawkFrame) {
-                    const tawkButton = tawkFrame.querySelector('button') as HTMLElement;
-                    if (tawkButton) tawkButton.click();
-                  }
-                }
-              }}
+              onClick={openTawkChat}
               className="px-8 py-4 bg-secondary text-gray-900 font-bold rounded-full hover:bg-yellow-300 transition-all shadow-lg hover:shadow-yellow-400/50 flex items-center justify-center gap-2"
             >
               <MessageCircle size={20} />
@@ -784,14 +760,15 @@ const Footer = ({ data, lang }: { data: SiteConfig['footer'], lang: Language }) 
                 <span className="material-icons-round text-primary text-sm mr-2">phone</span>
                 {data.phone}
               </li>
-              {data.helpCenter && (
-                <li className="flex items-center">
-                  <span className="material-icons-round text-primary text-sm mr-2">help</span>
-                  <a href={data.helpCenter} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-                    {lang === 'ru' ? 'Центр помощи' : lang === 'uz' ? 'Yordam markazi' : 'Help Center'}
-                  </a>
-                </li>
-              )}
+              <li className="flex items-center">
+                <span className="material-icons-round text-primary text-sm mr-2">help</span>
+                <button
+                  onClick={openTawkChat}
+                  className="hover:text-primary transition-colors cursor-pointer text-gray-500 dark:text-gray-400 hover:text-inherit"
+                >
+                  {lang === 'ru' ? 'Центр помощи' : lang === 'uz' ? 'Yordam markazi' : 'Help Center'}
+                </button>
+              </li>
             </ul>
           </div>
         </div>
@@ -806,6 +783,20 @@ const Footer = ({ data, lang }: { data: SiteConfig['footer'], lang: Language }) 
       </div>
     </footer>
   );
+};
+
+// Helper function to open Tawk chat
+const openTawkChat = () => {
+  const tawkAPI = (window as any).Tawk_API;
+  if (tawkAPI) {
+    if (typeof tawkAPI.toggle === 'function') {
+      tawkAPI.toggle();
+    } else if (typeof tawkAPI.maximize === 'function') {
+      tawkAPI.maximize();
+    } else if (typeof tawkAPI.showWidget === 'function') {
+      tawkAPI.showWidget();
+    }
+  }
 };
 
 export default function App() {

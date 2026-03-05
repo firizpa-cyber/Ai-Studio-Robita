@@ -185,11 +185,17 @@ const Hero = ({ data, lang }: { data: SiteConfig['hero'], lang: Language }) => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => {
-                  const tawkWidget = document.querySelector('iframe[src*="tawk.to"]')?.parentElement;
-                  if (tawkWidget) {
-                    tawkWidget.style.animation = 'slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                  if ((window as any).Tawk_API && typeof (window as any).Tawk_API.toggle === 'function') {
+                    (window as any).Tawk_API.toggle();
+                  } else if ((window as any).Tawk_API && typeof (window as any).Tawk_API.maximize === 'function') {
+                    (window as any).Tawk_API.maximize();
+                  } else {
+                    const tawkFrame = document.querySelector('iframe[src*="tawk.to"]')?.parentElement;
+                    if (tawkFrame) {
+                      const tawkButton = tawkFrame.querySelector('button') as HTMLElement;
+                      if (tawkButton) tawkButton.click();
+                    }
                   }
-                  (window as any).Tawk_API?.maximize();
                 }}
                 className="px-8 py-4 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all flex items-center gap-2 shadow-xl hover:shadow-primary/30"
               >
@@ -689,11 +695,17 @@ const CTA = ({ data, lang }: { data: SiteConfig['ctaSection'], lang: Language })
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => {
-                const tawkWidget = document.querySelector('iframe[src*="tawk.to"]')?.parentElement;
-                if (tawkWidget) {
-                  tawkWidget.style.animation = 'slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                if ((window as any).Tawk_API && typeof (window as any).Tawk_API.toggle === 'function') {
+                  (window as any).Tawk_API.toggle();
+                } else if ((window as any).Tawk_API && typeof (window as any).Tawk_API.maximize === 'function') {
+                  (window as any).Tawk_API.maximize();
+                } else {
+                  const tawkFrame = document.querySelector('iframe[src*="tawk.to"]')?.parentElement;
+                  if (tawkFrame) {
+                    const tawkButton = tawkFrame.querySelector('button') as HTMLElement;
+                    if (tawkButton) tawkButton.click();
+                  }
                 }
-                (window as any).Tawk_API?.maximize();
               }}
               className="px-8 py-4 bg-secondary text-gray-900 font-bold rounded-full hover:bg-yellow-300 transition-all shadow-lg hover:shadow-yellow-400/50 flex items-center justify-center gap-2"
             >

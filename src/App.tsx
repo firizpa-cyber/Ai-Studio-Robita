@@ -60,16 +60,11 @@ const Navbar = ({ isDark, toggleTheme, lang, setLang, config, onAdminClick }: { 
     <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-white/5 py-2' : 'bg-transparent py-4'}`}>
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between px-4">
         <a href="#" className="flex items-center gap-2 group">
-          <motion.div 
-            whileHover={{ rotate: 180 }}
-            className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20"
-          >
-            <Rocket size={20} />
-          </motion.div>
-          <div className="flex flex-col leading-none">
-            <span className="text-xl font-black tracking-tighter text-gray-900 dark:text-white group-hover:text-primary transition-colors">ROBITAI</span>
-            <span className="text-sm font-black tracking-[0.2em] text-secondary">NAV</span>
-          </div>
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F65cef22e306b487d9320306863a9ac53%2F3744ebc5900142e9b8409025fd213155?format=webp&width=800&height=1200"
+            alt="Robitai Nav Logo"
+            className="h-12 w-auto group-hover:scale-105 transition-transform"
+          />
         </a>
         
         <div className="flex md:order-2 gap-3 items-center">
@@ -697,8 +692,11 @@ const Footer = ({ data, lang }: { data: SiteConfig['footer'], lang: Language }) 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <span className="material-icons-round text-primary text-3xl">diversity_3</span>
-              <span className="text-xl font-bold text-gray-900 dark:text-white uppercase">Robitai Nav</span>
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets%2F65cef22e306b487d9320306863a9ac53%2F3744ebc5900142e9b8409025fd213155?format=webp&width=800&height=1200"
+                alt="Robitai Nav Logo"
+                className="h-12 w-auto"
+              />
             </div>
             <p className="text-gray-500 dark:text-gray-400 text-sm">
               {lang === 'ru' ? 'Ведущий поставщик цифрового контента и технологических решений в Центральной Азии.' : lang === 'uz' ? 'Markaziy Osiyoda raqamli kontent va texnologik yechimlarning yetakchi yetkazib beruvchisi.' : 'Leading provider of digital content and technological solutions in Central Asia.'}

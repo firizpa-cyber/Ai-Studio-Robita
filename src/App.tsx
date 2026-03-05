@@ -60,16 +60,11 @@ const Navbar = ({ isDark, toggleTheme, lang, setLang, config, onAdminClick }: { 
     <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-100 dark:border-white/5 py-2' : 'bg-transparent py-4'}`}>
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between px-4">
         <a href="#" className="flex items-center gap-2 group">
-          <motion.div 
-            whileHover={{ rotate: 180 }}
-            className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-lg shadow-primary/20"
-          >
-            <Rocket size={20} />
-          </motion.div>
-          <div className="flex flex-col leading-none">
-            <span className="text-xl font-black tracking-tighter text-gray-900 dark:text-white group-hover:text-primary transition-colors">ROBITAI</span>
-            <span className="text-sm font-black tracking-[0.2em] text-secondary">NAV</span>
-          </div>
+          <img
+            src="https://cdn.builder.io/api/v1/image/assets%2F65cef22e306b487d9320306863a9ac53%2F3744ebc5900142e9b8409025fd213155?format=webp&width=800&height=1200"
+            alt="Robitai Nav Logo"
+            className="h-12 w-auto group-hover:scale-105 transition-transform"
+          />
         </a>
         
         <div className="flex md:order-2 gap-3 items-center">
@@ -186,13 +181,15 @@ const Hero = ({ data, lang }: { data: SiteConfig['hero'], lang: Language }) => {
                 {t(data.cta, lang)} 
                 <Rocket size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>
-              <button 
-                onClick={() => (window as any).Tawk_API?.maximize()}
-                className="px-8 py-4 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all flex items-center gap-2 shadow-xl"
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={openTawkChat}
+                className="px-8 py-4 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all flex items-center gap-2 shadow-xl hover:shadow-primary/30"
               >
                 <MessageCircle size={20} className="text-primary" />
                 {lang === 'ru' ? 'Поддержка' : lang === 'uz' ? 'Yordam' : 'Support'}
-              </button>
+              </motion.button>
             </motion.div>
 
             <div className="flex items-center gap-8 pt-4">
@@ -641,19 +638,19 @@ const CTA = ({ data, lang }: { data: SiteConfig['ctaSection'], lang: Language })
           
           <AnimatePresence mode="wait">
             {!submitted ? (
-              <motion.form 
+              <motion.form
                 key="form"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                onSubmit={handleSubmit} 
+                onSubmit={handleSubmit}
                 className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto mb-6"
               >
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={lang === 'ru' ? 'Ваш Email' : lang === 'uz' ? 'Sizning Emailingiz' : 'Your Email'} 
+                  placeholder={lang === 'ru' ? 'Ваш Email' : lang === 'uz' ? 'Sizning Emailingiz' : 'Your Email'}
                   required
                   className="flex-1 px-6 py-4 rounded-full border-0 focus:ring-4 focus:ring-yellow-400/50 text-gray-900 placeholder-gray-400 outline-none shadow-lg"
                 />
@@ -662,7 +659,7 @@ const CTA = ({ data, lang }: { data: SiteConfig['ctaSection'], lang: Language })
                 </button>
               </motion.form>
             ) : (
-              <motion.div 
+              <motion.div
                 key="success"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -680,6 +677,18 @@ const CTA = ({ data, lang }: { data: SiteConfig['ctaSection'], lang: Language })
               </motion.div>
             )}
           </AnimatePresence>
+
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={openTawkChat}
+              className="px-8 py-4 bg-secondary text-gray-900 font-bold rounded-full hover:bg-yellow-300 transition-all shadow-lg hover:shadow-yellow-400/50 flex items-center justify-center gap-2"
+            >
+              <MessageCircle size={20} />
+              {lang === 'ru' ? 'Связаться с нами' : lang === 'uz' ? 'Biz bilan bog\'lanish' : 'Contact Us'}
+            </motion.button>
+          </div>
           
           <p className="mt-4 text-xs text-blue-200">
             {lang === 'ru' ? 'Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности.' : lang === 'uz' ? 'Tugmani bosish orqali siz maxfiylik siyosatiga rozilik bildirasiz.' : 'By clicking the button, you agree to the privacy policy.'}
@@ -697,8 +706,11 @@ const Footer = ({ data, lang }: { data: SiteConfig['footer'], lang: Language }) 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <span className="material-icons-round text-primary text-3xl">diversity_3</span>
-              <span className="text-xl font-bold text-gray-900 dark:text-white uppercase">Robitai Nav</span>
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets%2F65cef22e306b487d9320306863a9ac53%2F3744ebc5900142e9b8409025fd213155?format=webp&width=800&height=1200"
+                alt="Robitai Nav Logo"
+                className="h-12 w-auto"
+              />
             </div>
             <p className="text-gray-500 dark:text-gray-400 text-sm">
               {lang === 'ru' ? 'Ведущий поставщик цифрового контента и технологических решений в Центральной Азии.' : lang === 'uz' ? 'Markaziy Osiyoda raqamli kontent va texnologik yechimlarning yetakchi yetkazib beruvchisi.' : 'Leading provider of digital content and technological solutions in Central Asia.'}
@@ -748,14 +760,15 @@ const Footer = ({ data, lang }: { data: SiteConfig['footer'], lang: Language }) 
                 <span className="material-icons-round text-primary text-sm mr-2">phone</span>
                 {data.phone}
               </li>
-              {data.helpCenter && (
-                <li className="flex items-center">
-                  <span className="material-icons-round text-primary text-sm mr-2">help</span>
-                  <a href={data.helpCenter} target="_blank" rel="noopener noreferrer" className="hover:text-primary transition-colors">
-                    {lang === 'ru' ? 'Центр помощи' : lang === 'uz' ? 'Yordam markazi' : 'Help Center'}
-                  </a>
-                </li>
-              )}
+              <li className="flex items-center">
+                <span className="material-icons-round text-primary text-sm mr-2">help</span>
+                <button
+                  onClick={openTawkChat}
+                  className="hover:text-primary transition-colors cursor-pointer text-gray-500 dark:text-gray-400 hover:text-inherit"
+                >
+                  {lang === 'ru' ? 'Центр помощи' : lang === 'uz' ? 'Yordam markazi' : 'Help Center'}
+                </button>
+              </li>
             </ul>
           </div>
         </div>
@@ -770,6 +783,20 @@ const Footer = ({ data, lang }: { data: SiteConfig['footer'], lang: Language }) 
       </div>
     </footer>
   );
+};
+
+// Helper function to open Tawk chat
+const openTawkChat = () => {
+  const tawkAPI = (window as any).Tawk_API;
+  if (tawkAPI) {
+    if (typeof tawkAPI.toggle === 'function') {
+      tawkAPI.toggle();
+    } else if (typeof tawkAPI.maximize === 'function') {
+      tawkAPI.maximize();
+    } else if (typeof tawkAPI.showWidget === 'function') {
+      tawkAPI.showWidget();
+    }
+  }
 };
 
 export default function App() {

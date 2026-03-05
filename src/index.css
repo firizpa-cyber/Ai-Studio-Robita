@@ -25,6 +25,21 @@
     0% { transform: translateX(0%); }
     100% { transform: translateX(-100%); }
   }
+  @keyframes slideIn {
+    0% {
+      transform: translateY(100%) scale(0.9);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+  @keyframes chatPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
 }
 
 @variant dark (&:where(.dark, .dark *));
@@ -72,4 +87,13 @@
 
 .btn-secondary {
   @apply inline-flex items-center justify-center px-8 py-4 text-base font-medium text-primary border-2 border-primary/20 rounded-full hover:bg-primary/5 transition-colors dark:text-white dark:border-white/20;
+}
+
+/* Chat widget animations */
+[id*="tawk"] {
+  animation: slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+.chat-button-active {
+  animation: chatPulse 0.5s ease-out;
 }

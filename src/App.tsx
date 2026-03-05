@@ -181,13 +181,21 @@ const Hero = ({ data, lang }: { data: SiteConfig['hero'], lang: Language }) => {
                 {t(data.cta, lang)} 
                 <Rocket size={20} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </button>
-              <button 
-                onClick={() => (window as any).Tawk_API?.maximize()}
-                className="px-8 py-4 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all flex items-center gap-2 shadow-xl"
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  const tawkWidget = document.querySelector('iframe[src*="tawk.to"]')?.parentElement;
+                  if (tawkWidget) {
+                    tawkWidget.style.animation = 'slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                  }
+                  (window as any).Tawk_API?.maximize();
+                }}
+                className="px-8 py-4 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-2xl font-bold text-gray-900 dark:text-white hover:bg-gray-50 dark:hover:bg-white/10 transition-all flex items-center gap-2 shadow-xl hover:shadow-primary/30"
               >
                 <MessageCircle size={20} className="text-primary" />
                 {lang === 'ru' ? 'Поддержка' : lang === 'uz' ? 'Yordam' : 'Support'}
-              </button>
+              </motion.button>
             </motion.div>
 
             <div className="flex items-center gap-8 pt-4">
@@ -636,19 +644,19 @@ const CTA = ({ data, lang }: { data: SiteConfig['ctaSection'], lang: Language })
           
           <AnimatePresence mode="wait">
             {!submitted ? (
-              <motion.form 
+              <motion.form
                 key="form"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                onSubmit={handleSubmit} 
+                onSubmit={handleSubmit}
                 className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto mb-6"
               >
-                <input 
-                  type="email" 
+                <input
+                  type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={lang === 'ru' ? 'Ваш Email' : lang === 'uz' ? 'Sizning Emailingiz' : 'Your Email'} 
+                  placeholder={lang === 'ru' ? 'Ваш Email' : lang === 'uz' ? 'Sizning Emailingiz' : 'Your Email'}
                   required
                   className="flex-1 px-6 py-4 rounded-full border-0 focus:ring-4 focus:ring-yellow-400/50 text-gray-900 placeholder-gray-400 outline-none shadow-lg"
                 />
@@ -657,7 +665,7 @@ const CTA = ({ data, lang }: { data: SiteConfig['ctaSection'], lang: Language })
                 </button>
               </motion.form>
             ) : (
-              <motion.div 
+              <motion.div
                 key="success"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -675,6 +683,24 @@ const CTA = ({ data, lang }: { data: SiteConfig['ctaSection'], lang: Language })
               </motion.div>
             )}
           </AnimatePresence>
+
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                const tawkWidget = document.querySelector('iframe[src*="tawk.to"]')?.parentElement;
+                if (tawkWidget) {
+                  tawkWidget.style.animation = 'slideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                }
+                (window as any).Tawk_API?.maximize();
+              }}
+              className="px-8 py-4 bg-secondary text-gray-900 font-bold rounded-full hover:bg-yellow-300 transition-all shadow-lg hover:shadow-yellow-400/50 flex items-center justify-center gap-2"
+            >
+              <MessageCircle size={20} />
+              {lang === 'ru' ? 'Связаться с нами' : lang === 'uz' ? 'Biz bilan bog\'lanish' : 'Contact Us'}
+            </motion.button>
+          </div>
           
           <p className="mt-4 text-xs text-blue-200">
             {lang === 'ru' ? 'Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности.' : lang === 'uz' ? 'Tugmani bosish orqali siz maxfiylik siyosatiga rozilik bildirasiz.' : 'By clicking the button, you agree to the privacy policy.'}
